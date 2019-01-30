@@ -8,15 +8,18 @@ import cv2
 import numpy as np
 import tensorflow as tf
 
-sys.path.append(os.getcwd())
+sys.path.append('../')
+# sys.path.append(os.getcwd())
 from nets import model_train as model
 from utils.rpn_msr.proposal_layer import proposal_layer
 from utils.text_connector.detectors import TextDetector
 
-tf.app.flags.DEFINE_string('test_data_path', 'data/demo/', '')
-tf.app.flags.DEFINE_string('output_path', 'data/res/', '')
+project_path = os.path.dirname(os.path.abspath(__file__)) + "/../"
+
+tf.app.flags.DEFINE_string('test_data_path', project_path + 'data/demo/', '')
+tf.app.flags.DEFINE_string('output_path', project_path + 'data/res/', '')
 tf.app.flags.DEFINE_string('gpu', '0', '')
-tf.app.flags.DEFINE_string('checkpoint_path', 'checkpoints_mlt/', '')
+tf.app.flags.DEFINE_string('checkpoint_path', project_path + 'checkpoints_mlt/', '')
 FLAGS = tf.app.flags.FLAGS
 
 
@@ -48,7 +51,7 @@ def resize_image(img):
     new_w = new_w if new_w // 16 == 0 else (new_w // 16 + 1) * 16
 
     re_im = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_LINEAR)
-    return re_im, (new_h / img_size[0], new_w / img_size[1])
+    return re_im, (float(new_h) / img_size[0], float(new_w) / img_size[1])
 
 
 def main(argv=None):
